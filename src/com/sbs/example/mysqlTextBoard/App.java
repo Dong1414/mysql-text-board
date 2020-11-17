@@ -15,7 +15,7 @@ public class App {
 		while (true) {
 			System.out.printf("명령어) ");
 			String cmd = sc.nextLine();
-			MysqlUtil.setDBInfo("localhost", "sbsst", "sbs123414", "mysqlutildemo");
+			MysqlUtil.setDBInfo("localhost", "sbsst", "sbs123414", "textBoard");
 			MysqlUtil.setDevMode(true);
 			
 			if (cmd.startsWith("article ")) {

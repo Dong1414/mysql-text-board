@@ -1,5 +1,7 @@
 package com.sbs.example.mysqlTextBoard.dto;
 
+import java.util.Map;
+
 public class Member {
 	public int id;
 	public String loginId;
@@ -20,6 +22,13 @@ public class Member {
 		this.loginId = loginId;
 		this.loginPw = loginPw;
 		this.name = name;
+	}
+
+	public Member(Map<String, Object> memberlogin) {
+		this.id = (int)memberlogin.get("id");
+		this.loginId = (String)memberlogin.get("loginId");
+		this.loginPw = (String)memberlogin.get("loginPw");
+		this.name = (String)memberlogin.get("name");
 	}
 	
 }

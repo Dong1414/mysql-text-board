@@ -17,12 +17,36 @@ public class MemberController {
 	public void doCommand(String cmd) {
 		if (cmd.equals("member join")) {
 			join();
-
 		} else if (cmd.equals("member login")) {
-
 			login();
-
+		} else if(cmd.equals("member logout")) {
+			logout();
+		} else if(cmd.equals("member whoami")) {
+			whoami();
 		}
+			
+	}
+
+	private void whoami() {
+		if(!Container.session.isLoginId()) {
+			System.out.println("로그인 후 이용해주세요");
+			return;
+		}
+		Member member = memberService.getLoginId(Container.session.loginIdSave);
+		System.out.println("로그인 아이디 : " + member.loginId);
+		System.out.println("이름 : " + member.name);
+		
+	}
+
+	private void logout() {
+		if(!Container.session.isLoginId()) {
+			System.out.println("로그인 후 이용해주세요");
+			return;
+		}
+		
+		Member member = memberService.getLoginId(Container.session.loginIdSave);
+		System.out.println(member.name + "님이 로그아웃 하였습니다.");
+		Container.session.loginIdSave = 0;
 	}
 
 	private void join() {
@@ -40,7 +64,9 @@ public class MemberController {
 		System.out.printf("이름: ");
 		name = scan.nextLine();
 
-		memberService.join(loginId, loginPw, name);
+		int i = memberService.join(loginId, loginPw, name);
+
+		System.out.println(i + "번째 회원가입");
 
 	}
 
