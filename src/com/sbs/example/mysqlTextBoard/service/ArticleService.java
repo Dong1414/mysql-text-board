@@ -6,6 +6,7 @@ import com.sbs.example.mysqlTextBoard.Container;
 import com.sbs.example.mysqlTextBoard.dao.ArticleDao;
 import com.sbs.example.mysqlTextBoard.dto.Article;
 import com.sbs.example.mysqlTextBoard.dto.Board;
+import com.sbs.example.mysqlTextBoard.dto.Reple;
 
 public class ArticleService {
 	private ArticleDao articleDao;
@@ -48,14 +49,23 @@ public class ArticleService {
 		
 	}
 
-	public List<Article> boardArticleList(int boardId) {
-		return articleDao.boardArticleList(boardId);
+	public List<Article> getForPrintArticles(int boardId) {
+		return articleDao.getForPrintArticles(boardId);
 		
 	}
 
 	public int repleWrite(int input) {
 		return articleDao.repleSave(input);
 		
+	}
+
+	public List<Reple> getReple(int id) {
+		return articleDao.getReple(id);
+		
+	}
+
+	public List<Article> getList() {
+		return articleDao.getList();		
 	}
 
 }

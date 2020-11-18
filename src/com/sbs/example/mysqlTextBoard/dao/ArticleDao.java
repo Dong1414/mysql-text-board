@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.sbs.example.mysqlTextBoard.Container;
 import com.sbs.example.mysqlTextBoard.dto.Article;
 import com.sbs.example.mysqlTextBoard.dto.Board;
+import com.sbs.example.mysqlTextBoard.dto.Reple;
 import com.sbs.example.mysqlutil.MysqlUtil;
 import com.sbs.example.mysqlutil.SecSql;
 
@@ -93,11 +94,11 @@ public class ArticleDao {
 		
 	}
 
-	public List<Article> boardArticleList(int boardId) {
+	public List<Article> getForPrintArticles(int boardId) {
 		List<Article> articles = new ArrayList<>();
 
 		SecSql sql = new SecSql();
-		sql.append("SELECT * FROM article WHERE boardId = ?",boardId);
+		sql.append("SELECT article.*, `member`.name AS extra_writer FROM article INNER JOIN `member` ON article.memberId = `member`.id WHERE boardId = ? ORDER BY article.id DESC",boardId);
 		List<Map<String, Object>> articleMapList = MysqlUtil.selectRows(sql);
 
 		if(articleMapList.isEmpty()) {
@@ -114,13 +115,49 @@ public class ArticleDao {
 	public int repleSave(int input) {
 		Scanner scan = Container.scanner;
 		SecSql sql = new SecSql();
-		SecSql sql1 = new SecSql();
+	
 		System.out.printf("댓글: ");
 		String body = scan.nextLine();
-		sql.append("UPDATE article SET reple = ? WHERE id = ?",body,input);
-		sql1.append("INSERT INTO reple SET `body` = ?",body);
+		sql.append("INSERT INTO reple set id = ?, `body` = ?", input, body);
+	
 		
-		MysqlUtil.insert(sql1);
+	
 		return MysqlUtil.update(sql);
+	}
+
+	public List<Reple> getReple(int id) {
+		List<Reple> reples = new ArrayList<>();
+		SecSql sql = new SecSql();
+		sql.append("SELECT * FROM reple WHERE id = ?", id);
+
+		List<Map<String, Object>> repleMaps = MysqlUtil.selectRows(sql);
+		
+		if(repleMaps.isEmpty()) {
+			return null;
+		}
+		for(Map<String, Object> reple : repleMaps) {
+			reples.add(new Reple(reple));
+		}
+		
+		return reples;
+	}
+
+	public List<Article> getList() {
+		List<Article> articles = new ArrayList<>();
+		SecSql sql = new SecSql();
+		sql.append("SELECT article.*, `member`.name AS extra_writer FROM article INNER JOIN `member` ON article.memberId = `member`.id");
+
+		List<Map<String, Object>> articleMaps = MysqlUtil.selectRows(sql);
+
+		if (articleMaps.isEmpty()) {
+			return null;
+		}
+		for(Map<String, Object> articleMap : articleMaps) {
+			Article article = new Article(articleMap);
+			
+			articles.add(article);
+			
+		}
+		return articles;
 	}
 }

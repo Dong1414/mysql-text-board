@@ -11,25 +11,25 @@ public class Article {
 	public int memberId;
 	public int boardId;
 	public String reple;
+	public String extra_writer;
 
 	public Article() {
 
 	}
 
-
 	public Article(Map<String, Object> articleMap) {
-		this.id = (int)articleMap.get("id");
-		this.regDate = (String)articleMap.get("regDate");
-		this.updateDate = (String)articleMap.get("updateDate");
-		this.title = (String)articleMap.get("title");
-		this.body = (String)articleMap.get("body");
-		this.memberId = (int)articleMap.get("memberId");
-		this.boardId = (int)articleMap.get("boardId");
-		this.reple = (String)articleMap.get("reple");
-			
+		this.id = (int) articleMap.get("id");
+		this.regDate = (String) articleMap.get("regDate");
+		this.updateDate = (String) articleMap.get("updateDate");
+		this.title = (String) articleMap.get("title");
+		this.body = (String) articleMap.get("body");
+		this.memberId = (int) articleMap.get("memberId");
+		this.boardId = (int) articleMap.get("boardId");
+		this.reple = (String) articleMap.get("reple");
+		if (articleMap.containsKey("extra_writer")){
+			this.extra_writer = (String) articleMap.get("extra_writer");
+		}
 	}
-
-
 
 	@Override
 	public String toString() {
