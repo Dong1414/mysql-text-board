@@ -11,6 +11,8 @@ public class Article {
 	public int memberId;
 	public int boardId;
 	public String reple;
+	public int hit;
+	public int good;
 	public String extra_writer;
 
 	public Article() {
@@ -26,6 +28,12 @@ public class Article {
 		this.memberId = (int) articleMap.get("memberId");
 		this.boardId = (int) articleMap.get("boardId");
 		this.reple = (String) articleMap.get("reple");
+		if (articleMap.containsKey("good")){
+			this.hit = (int) articleMap.get("good");
+		}
+		if (articleMap.containsKey("hit")){
+			this.hit = (int) articleMap.get("hit");
+		}
 		if (articleMap.containsKey("extra_writer")){
 			this.extra_writer = (String) articleMap.get("extra_writer");
 		}

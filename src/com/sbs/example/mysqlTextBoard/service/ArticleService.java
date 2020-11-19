@@ -6,6 +6,7 @@ import com.sbs.example.mysqlTextBoard.Container;
 import com.sbs.example.mysqlTextBoard.dao.ArticleDao;
 import com.sbs.example.mysqlTextBoard.dto.Article;
 import com.sbs.example.mysqlTextBoard.dto.Board;
+import com.sbs.example.mysqlTextBoard.dto.ReCommand;
 import com.sbs.example.mysqlTextBoard.dto.Reple;
 
 public class ArticleService {
@@ -66,6 +67,27 @@ public class ArticleService {
 
 	public List<Article> getList() {
 		return articleDao.getList();		
+	}
+
+	public int repleModify(int input) {
+		return articleDao.repleModify(input);
+	}
+
+	public int repleDelete(int input) {
+		return articleDao.repleDelete(input);
+		
+	}
+
+	public int reCommand(int input, int id) {
+		return articleDao.reCommand(input,id);
+	}
+
+	public int getGood(int id) {
+		return articleDao.getReGoods(id);
+	}
+
+	public int cancleReCommand(int input, int id) {
+		return articleDao.cancelReCommand(input,id);		
 	}
 
 }

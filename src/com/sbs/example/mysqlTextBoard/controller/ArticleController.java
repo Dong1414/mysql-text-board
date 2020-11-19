@@ -7,6 +7,7 @@ import com.sbs.example.mysqlTextBoard.Container;
 import com.sbs.example.mysqlTextBoard.dto.Article;
 import com.sbs.example.mysqlTextBoard.dto.Board;
 import com.sbs.example.mysqlTextBoard.dto.Member;
+import com.sbs.example.mysqlTextBoard.dto.ReCommand;
 import com.sbs.example.mysqlTextBoard.dto.Reple;
 import com.sbs.example.mysqlTextBoard.service.ArticleService;
 
@@ -39,6 +40,77 @@ public class ArticleController {
 		} else if (cmd.startsWith("article reple ")) {
 			int input = Integer.parseInt(cmd.split(" ")[2]);
 			doReple(input);
+		} else if (cmd.startsWith("article replemodify ")) {
+			int input = Integer.parseInt(cmd.split(" ")[2]);
+			doRepleModify(input);
+		} else if (cmd.startsWith("article repledelete ")) {
+			int input = Integer.parseInt(cmd.split(" ")[2]);
+			doRepleDelete(input);
+		} else if (cmd.startsWith("article recommand ")) {
+			int input = Integer.parseInt(cmd.split(" ")[2]);
+			doReCommand(input);
+		} else if (cmd.startsWith("article cancelrecommand ")) {
+			int input = Integer.parseInt(cmd.split(" ")[2]);
+			doCancleReCommand(input);
+		}
+	}
+
+	private void doCancleReCommand(int input) {
+		if (!Container.session.isLoginId()) {
+			System.out.println("로그인 후 이용해주세요");
+			return;
+		}
+		
+		Article article = articleService.getArticle(input);
+		if (article == null) {
+			System.out.println("존재하지 않는 게시글 입니다.");
+			return;
+		}
+		int i = articleService.cancleReCommand(input,Container.session.loginIdSave);
+		if (i != 0) {
+			System.out.println(input + "번 게시물 추천 취소");
+		}
+	}
+
+	private void doReCommand(int input) {
+		if (!Container.session.isLoginId()) {
+			System.out.println("로그인 후 이용해주세요");
+			return;
+		}
+
+		Article article = articleService.getArticle(input);
+		if (article == null) {
+			System.out.println("존재하지 않는 게시글 입니다.");
+			return;
+		}
+		int i = articleService.reCommand(input, Container.session.loginIdSave);
+		if (i != 0) {
+			System.out.println("추천 완료");
+		}
+	}
+
+	private void doRepleDelete(int input) {
+		Article article = articleService.getArticle(input);
+		if (article == null) {
+			System.out.println("존재하지 않는 게시글 입니다.");
+			return;
+		}
+		int i = articleService.repleDelete(input);
+		if (i != 0) {
+			System.out.println(i + "번 게시글에 댓글을 삭제하였습니다.");
+		}
+
+	}
+
+	private void doRepleModify(int input) {
+		Article article = articleService.getArticle(input);
+		if (article == null) {
+			System.out.println("존재하지 않는 게시글 입니다.");
+			return;
+		}
+		int i = articleService.repleModify(input);
+		if (i != 0) {
+			System.out.println(i + "번 게시글에 댓글을 수정하였습니다.");
 		}
 	}
 
@@ -125,9 +197,12 @@ public class ArticleController {
 		System.out.println("제목: " + article.title);
 		System.out.println("내용: " + article.body);
 		System.out.println("작성자: " + article.memberId);
-
+		
+		System.out.println("조회수: " + article.hit);
 		Board board = articleService.selectBoard(article.boardId);
 		System.out.println("게시판: " + board.boardName);
+		int goods = articleService.getGood(article.id);
+		System.out.println("추천수: " + goods);
 
 		List<Reple> reples = articleService.getReple(article.id);
 		if (reples == null) {
@@ -177,9 +252,9 @@ public class ArticleController {
 
 	private void showList() {
 		System.out.println("== 게시물 리스트 ==");
-		System.out.println("번호 / 작성 / 수정 / 작성자 / 제목 / 게시판");
+		System.out.println("번호 / 작성 / 수정 / 작성자 / 제목 / 게시판 / 조회수 / 추천수");
 		List<Article> articles = articleService.getArticles(); // 사이즈 체크용
-		
+
 		List<Article> boardAarticles = articleService.getForPrintArticles(Container.session.boardIdSave);
 
 		if (boardAarticles == null) {
@@ -193,8 +268,8 @@ public class ArticleController {
 
 			Board board = articleService.selectBoard(article.boardId);
 
-			System.out.printf("%d / %s / %s / %s / %s / %s \n", article.id, article.regDate, article.updateDate,
-					article.extra_writer, article.title, board.boardName);
+			System.out.printf("%d / %s / %s / %s / %s / %s / %d\n", article.id, article.regDate, article.updateDate,
+					article.extra_writer, article.title, board.boardName, article.hit);
 
 		}
 	}

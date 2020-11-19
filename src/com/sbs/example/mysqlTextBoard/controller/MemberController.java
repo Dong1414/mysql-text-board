@@ -36,6 +36,7 @@ public class MemberController {
 		System.out.println("로그인 아이디 : " + member.loginId);
 		System.out.println("이름 : " + member.name);
 		
+		
 	}
 
 	private void logout() {
@@ -71,6 +72,10 @@ public class MemberController {
 	}
 
 	private void login() {
+		if(Container.session.isLoginId()) {
+			System.out.println("이미 로그인 중입니다.");
+			return;
+		}
 		String loginId;
 		String loginPw;
 		Member member = null;
